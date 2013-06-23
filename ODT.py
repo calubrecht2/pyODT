@@ -46,6 +46,21 @@ class ODT:
       other = ODT(other)
     s1 = self.getContentAsText().splitlines()
     s2 = other.getContentAsText().splitlines()
+    differ = difflib.context_diff(s1, s2, fromfile=self._filename, tofile=other._filename, lineterm='', n=1)
+    diffS = ''
+    for line in differ:
+      diffS += line + '\n'
+    return diffS
+  
+  def diff_charwise(self, other):
+    '''
+    Diffs two files, shows differences on a character by character basis.
+    Need to come up with a better output format.'''
+
+    if isinstance(other, str):
+      other = ODT(other)
+    s1 = self.getContentAsText()
+    s2 = other.getContentAsText()
     differ = difflib.context_diff(s1, s2, fromfile=self._filename, tofile=other._filename, lineterm='')
     diffS = ''
     for line in differ:
