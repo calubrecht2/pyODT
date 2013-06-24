@@ -1,0 +1,2 @@
+#!/bin/sh
+[ $# -eq 7 ] && diffODT.py "$2" "$5"
