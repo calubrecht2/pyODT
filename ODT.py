@@ -11,7 +11,16 @@ class ODT:
     self._archive.close()
 
   def getContent(self):
-    return self._archive.open("content.xml").read()
+    return self.getFile("content.xml")
+
+  def listImages(self):
+    return filter(lambda x : x.startswith("Pictures/"), self.listFiles())
+
+  def getFile(self, fileName):
+    return self._archive.open(fileName).read()
+
+  def listFiles(self):
+    return map(lambda x: x.filename, self._archive.filelist)
 
   class ODTContentHandler(xml.sax.ContentHandler):
     """
@@ -41,7 +50,7 @@ class ODT:
     parser.parse(self._archive.open("content.xml"))
     return handler._buffer 
 
-  def diff(self, other):
+  def diffText(self, other):
     if isinstance(other, str):
       other = ODT(other)
     s1 = self.getContentAsText().splitlines()
@@ -51,6 +60,31 @@ class ODT:
     for line in differ:
       diffS += line + '\n'
     return diffS
+  
+  def diff(self, other):
+    return self.diffText(other) + '------\n' + self.diffImages(other)
+
+  def diffImages(self, other):
+    if isinstance(other, str):
+      other = ODT(other)
+    selfimgs = self.listImages()
+    otherimgs = other.listImages()
+    modifiedimgs = []
+    selfimgs.sort()
+    otherimgs.sort()
+    newimgs = list(set(otherimgs) - set(selfimgs))
+    delimgs = list(set(selfimgs) - set(otherimgs))
+    for img in (set(selfimgs) - set(delimgs)):
+      selfI = self.getFile(img)
+      otherI = self.getFile(img)
+      if selfI != otherI:
+        modifiedimgs.append(img)
+
+    diffS =  '%s new images: %s\n' % (str(len(newimgs)), str(newimgs))
+    diffS += '%s deleted images: %s\n' % (str(len(delimgs)), str(delimgs))
+    diffS += '%s modified images: %s' % (str(len(modifiedimgs)), str(modifiedimgs))
+    return diffS
+      
   
   def diff_charwise(self, other):
     '''
