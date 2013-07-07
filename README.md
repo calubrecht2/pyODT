@@ -1,17 +1,13 @@
 pyODT
 =====
 
-A Python library to handle Open Document word processor files. First goal is a textual diff.
+A Python library to handle Open Document word processor files. 
 
+First major feature is odt diff
 
 odt diff
-First, open zipfile and read in content.xml, parsing xml.
-Build up unformatted text block, reading text:p tags as paragraphs.
-Diff the text.
-
-Diff the files in Pictures?
-
-Go through content.xml again and diff changes in styling?
+Compares two odt files on a paragraph by paragraph basis, displaying diffs.
+Also examines the lists of images and reports any changes.
 
 
 ----
