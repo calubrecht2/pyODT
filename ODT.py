@@ -48,7 +48,7 @@ class ODT:
     handler = self.ODTContentHandler()
     parser.setContentHandler(handler)
     parser.parse(self._archive.open("content.xml"))
-    return handler._buffer 
+    return handler._buffer.encode("ascii","replace")
 
   def diffText(self, other):
     if isinstance(other, str):
