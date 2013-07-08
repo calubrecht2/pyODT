@@ -20,6 +20,6 @@ add a .gitattributes file, telling git to use an alternate diff for odt files
 
 Then set up the odt diff tool in your config
 
-git config --global diff.odt <path>/extDiffODT
+git config --global diff.odt.command <path>/extDiffODT
 
 make sure pyODT is in your PYTHONPATH
