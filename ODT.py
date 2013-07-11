@@ -62,9 +62,9 @@ class ODT:
     return diffS
   
   def diff(self, other):
-    return self.diffText(other) + '------\n' + self.diffImages(other)
+    return self.diffText(other) + '------\n' + self.diffImages(other, False)
 
-  def diffImages(self, other):
+  def diffImages(self, other, alwaysPrint = True):
     if isinstance(other, str):
       other = ODT(other)
     selfimgs = self.listImages()
@@ -79,10 +79,14 @@ class ODT:
       otherI = self.getFile(img)
       if selfI != otherI:
         modifiedimgs.append(img)
-
-    diffS =  '%s new images: %s\n' % (str(len(newimgs)), str(newimgs))
-    diffS += '%s deleted images: %s\n' % (str(len(delimgs)), str(delimgs))
-    diffS += '%s modified images: %s' % (str(len(modifiedimgs)), str(modifiedimgs))
+    
+    diffS = ''
+    if alwaysPrint or len(newimgs) > 0:
+      diffS +=  '%s new images: %s\n' % (str(len(newimgs)), str(newimgs))
+    if alwaysPrint or len(delimgs) > 0:
+      diffS += '%s deleted images: %s\n' % (str(len(delimgs)), str(delimgs))
+    if alwaysPrint or len(modifiedimgs) > 0:
+      diffS += '%s modified images: %s' % (str(len(modifiedimgs)), str(modifiedimgs))
     return diffS
       
   
