@@ -1,2 +1,4 @@
 #!/bin/sh
-[ $# -eq 7 ] && diffODT.py "$2" "$5"
+basedir=$(dirname $0)
+echo $basedir
+[ $# -eq 7 ] && python $basedir/diffODT.py "$2" "$5"
