@@ -33,6 +33,9 @@ class ODT:
     def startElement(self, name, attrs):
       if name == "text:p":
         self._paragraphCount += 1
+      if name == "text:h":
+        self._paragraphCount += 1
+        self._buffer += '^'
 
     def characters(self, ch):
       if self._paragraphCount > 0:
@@ -41,6 +44,10 @@ class ODT:
     def endElement(self, name):
       if name == "text:p":
         self._paragraphCount -= 1
+        self._buffer += '\n'
+      if name == "text:h":
+        self._paragraphCount -= 1
+        self._buffer += '^'
         self._buffer += '\n'
 
   def getContentAsText(self):
